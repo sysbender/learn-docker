@@ -10,10 +10,12 @@ services:
       "if [ ! -f /etc/ssl/certs/ca-key.pem ]; then 
         mkdir -p /etc/ssl/certs && 
         openssl genrsa -out /etc/ssl/certs/server-key.pem 2048 && 
-        openssl req -new -x509 -key /etc/ssl/certs/server-key.pem -out /etc/ssl/certs/server-cert.pem -days 365 -subj '/CN=yourdomain.com' && 
+        openssl req -new -x509 -key /etc/ssl/certs/server-key.pem -out /etc/ssl/certs/server-cert.pem -days 365 -subj '/CN=syslog-ng' -addext 'subjectAltName=DNS:syslog-ng,IP:192.168.0.122,IP:127.0.0.1' && 
         openssl genrsa -out /etc/ssl/certs/ca-key.pem 2048 && 
-        openssl req -new -x509 -key /etc/ssl/certs/ca-key.pem -out /etc/ssl/certs/ca-cert.pem -days 365 -subj '/CN=YourCA' && 
-        openssl dhparam -out /etc/ssl/certs/dhe-param.pem 2048; 
+        openssl req -new -x509 -key /etc/ssl/certs/ca-key.pem -out /etc/ssl/certs/ca-cert.pem -days 365 -subj '/CN=myca' && 
+        openssl genrsa -out /etc/ssl/certs/client-key.pem 2048 && 
+        openssl req -new -key /etc/ssl/certs/client-key.pem -out /etc/ssl/certs/client-cert.csr -days 365 -subj '/CN=tls-log-generator' -addext 'subjectAltName=DNS:tls-log-generator,IP:192.168.0.122' && 
+        openssl x509 -req -in /etc/ssl/certs/client-cert.csr -CA /etc/ssl/certs/ca-cert.pem -CAkey /etc/ssl/certs/ca-key.pem -set_serial 01 -days 365 -out /etc/ssl/certs/client-cert.pem; 
       else 
         echo \"Certificates already exist. Skipping generation.\";
       fi
@@ -26,6 +28,8 @@ services:
       - ./syslog-ng.conf:/etc/syslog-ng/syslog-ng.conf
       - ./certs:/etc/syslog-ng/certs
       - ./log:/var/log
+      - ./certs/ca-cert.pem:/usr/local/share/ca-certificates/ca-cert.pem
+    entrypoint: /bin/sh -c "update-ca-certificates && exec syslog-ng -F"
     ports:
       - "601:601"
       - "6513:6513"
@@ -40,4 +44,22 @@ services:
     entrypoint: ["/usr/local/bin/log-generator.sh"]
     environment:
       - SYSLOG_SERVER=syslog-ng  # Set the syslog server to the service name
-      - SYSLOG_PORT=601           # Set the port to 601
+      - SYSLOG_PORT=601  
+    depends_on:
+      - syslog-ng
+
+
+  tls-log-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Path to your Dockerfile for TLS log generator
+    volumes:
+      - ./certs:/etc/syslog-ng/certs  # Use the same certificate volume
+      - ./certs/ca-cert.pem:/usr/local/share/ca-certificates/ca-cert.pem      
+    environment:
+      - SYSLOG_SERVER=syslog-ng
+      - SYSLOG_PORT=6514
+    depends_on:
+      - syslog-ng
+
+
