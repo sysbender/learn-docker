@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  splunk-forwarder:
+    image: splunk/universalforwarder:latest
+    container_name: splunk-forwarder
+    environment:
+      SPLUNK_START_ARGS: "${SPLUNK_START_ARGS}"
+      SPLUNK_PASSWORD: "${SPLUNK_PASSWORD}"
+      SPLUNK_HEC_TOKEN: "${SPLUNK_HEC_TOKEN}"
+      SPLUNK_HEC_URL: "${SPLUNK_HEC_URL}"
+    volumes:
+      - ./config/inputs.conf:/opt/splunkforwarder/etc/system/local/inputs.conf
+      - ./config/outputs.conf:/opt/splunkforwarder/etc/system/local/outputs.conf
+      - ./certs:/opt/splunkforwarder/etc/system/ssl
+      #- /path/to/your/logs:/logs  # Optional: Replace with the path to your log files
+    ports:
+      - "${SYSLOG_PORT}:${SYSLOG_PORT}"  # Expose syslog port (TLS)
+    restart: always
