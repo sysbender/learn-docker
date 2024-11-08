@@ -1,0 +1,23 @@
+version: '3.8'
+
+
+# services:
+#   splunkforwarder:
+#     build: .
+#     environment:
+#       - INSTALLER=splunkforwarder-9.3.1-0b8d769cb912-Linux-x86_64.tgz  # Specify the installer filename here
+services:
+  splunkforwarder:
+    build:
+      context: .
+      dockerfile: splunkfwd.Dockerfile
+      args:
+        - INSTALLER=splunkforwarder-9.3.1-0b8d769cb912-Linux-x86_64.tgz
+    environment:
+      #- INSTALLER=splunkforwarder-9.3.1-0b8d769cb912-Linux-x86_64.tgz  # Define the installer name here
+      - SPLUNK_PASSWORD=changemoi
+    volumes:
+      - ./config/inputs.conf:/opt/splunkforwarder/etc/system/local/inputs.conf  # You may want to persist this to a volume if needed
+    ports:
+      - "8089:8089"  # Expose any necessary ports
+      - "6512:6512"
