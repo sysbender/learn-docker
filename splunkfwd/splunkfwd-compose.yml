@@ -20,4 +20,4 @@ services:
       - ./config/inputs.conf:/opt/splunkforwarder/etc/system/local/inputs.conf  # You may want to persist this to a volume if needed
     ports:
       - "8089:8089"  # Expose any necessary ports
-      - "6512:6512"
+      - "26512:26512"

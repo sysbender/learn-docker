@@ -1,0 +1,28 @@
+---
+splunk:
+  conf:
+    - key: user-prefs
+      value:
+        directory: /opt/splunkforwarder/etc/users/admin/user-prefs/local
+        content:
+          general:
+            default_namespace: appboilerplate
+            search_syntax_highlighting: dark
+    - key: outputs.conf
+      value:
+        directory: /opt/splunkforwarder/etc/system/local
+        content:
+          tcpout:
+            defaultGroup: splunk_cloud
+          tcpout:splunk_cloud:
+            server: prd-p-u9vzn.splunkcloud.com:8088
+            httpEventCollectorToken: ${SPLUNK_HEC_TOKEN}
+            sslVerifyServerCert: true
+    - key: inputs.conf
+      value:
+        directory: /opt/splunkforwarder/etc/system/local
+        content:
+          [monitor:///var/log]
+          disabled = false
+          index = main
+          sourcetype = syslog

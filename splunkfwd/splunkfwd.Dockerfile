@@ -1,5 +1,5 @@
 # Use the official Ubuntu image as the base
-FROM ubuntu:22.04
+FROM sysbender/ufbase:latest
 
 ARG INSTALLER
 # Set environment variables for non-interactive installation
@@ -12,11 +12,11 @@ ENV SPLUNK_ROLE splunk_universal_forwarder
 ENV SPLUNK_PASSWORD changemoi
 ENV SPLUNK_START_ARGS --accept-license
 # Install wget, tar, and any dependencies for Splunk
-RUN apt-get update && apt-get install -y \
-    wget \
-    tar \
-    expect \
-    && rm -rf /var/lib/apt/lists/*  # Clean up apt cache
+# RUN apt-get update && apt-get install -y \
+#     wget \
+#     tar \
+#     expect \
+#     && rm -rf /var/lib/apt/lists/*  # Clean up apt cache
 
 RUN bash -c 'echo "INSTALLER: $INSTALLER" && \
     VERSION=$(echo $INSTALLER | sed -E "s/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+).*/\1/") && \

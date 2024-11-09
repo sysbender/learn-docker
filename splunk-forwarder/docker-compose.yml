@@ -1,23 +1,51 @@
 version: '3.8'
 
+# volumes:
+#   opt-splunk-etc:
+#   opt-splunk-var:
+
 services:
   splunk-forwarder:
     image: splunk/universalforwarder:latest
-    container_name: splunk-forwarder
+    # image: my_splunk_uf_image
+     
+    container_name: suf
     environment:
-      SPLUNK_START_ARGS: "${SPLUNK_START_ARGS}"
-      SPLUNK_PASSWORD: "${SPLUNK_PASSWORD}"
-      SPLUNK_HEC_TOKEN: "${SPLUNK_HEC_TOKEN}"
-      SPLUNK_HEC_URL: "${SPLUNK_HEC_URL}"
-      SSL_CERT_PATH: "${SSL_CERT_PATH}"  # Optional, if you're dynamically setting certs in .env
-      SSL_CA_PATH: "${SSL_CA_PATH}"      # Optional, if you're dynamically setting certs in .env
-      SSL_PRIVATE_KEY_PATH: "${SSL_PRIVATE_KEY_PATH}"  # Optional
+      SPLUNK_HOME: /opt/splunkforwarder
+      SPLUNK_ROLE: splunk_universal_forwarder
+      SPLUNK_USER: "root"
+      SPLUNK_HTTP_ENABLE: false
+      # SPLUNK_GROUP: "splunk"
+      #SPLUNK_HOME_OWNERSHIP_ENFORCEMENT: false
+      #NO_HEALTHCHECK: "true"
+      #SPLUNK_START_ARGS: "${SPLUNK_START_ARGS}"
+      SPLUNK_START_ARGS: "--accept-license"
+      SPLUNK_PASSWORD: changemoi #"${SPLUNK_PASSWORD}"
+      # SPLUNK_HEC_TOKEN: "${SPLUNK_HEC_TOKEN}"
+      # SPLUNK_HEC_URL: "${SPLUNK_HEC_URL}"
+      # SSL_CERT_PATH: "${SSL_CERT_PATH}"  # Optional, if you're dynamically setting certs in .env
+      # SSL_CA_PATH: "${SSL_CA_PATH}"      # Optional, if you're dynamically setting certs in .env
+      # SSL_PRIVATE_KEY_PATH: "${SSL_PRIVATE_KEY_PATH}"  # Optional
+      # SPLUNK_CMD: "cp /tmp/t.txt /opt/splunkforwarder/etc/system/local/t.txt"
     volumes:
-      - ./config/inputs.conf:/opt/splunkforwarder/etc/system/local/inputs.conf
-      - ./config/outputs.conf:/opt/splunkforwarder/etc/system/local/outputs.conf
-      - ./certs/self-signed:/opt/splunkforwarder/etc/system/ssl/self-signed   # Mount self-signed certs for syslog
+      # - opt-splunk-etc:/opt/splunkforwarder/etc
+      # - opt-splunk-var:/opt/splunkforwarder/var
+      - ./etc:/opt/splunkforwarder/etc
+      - ./var:/opt/splunkforwarder/var
+      - ./t.txt:/tmp/t.txt
+      - ./splunkclouduf.spl:/splunkclouduf.spl
+      # - ./custom-configs:/mnt/data/custom-configs
+
+      # - ./config/inputs.conf:/opt/splunkforwarder/etc/system/local/inputs.conf
+      # - ./config/outputs.conf:/opt/splunkforwarder/etc/system/local/outputs.conf
+      # - ./certs/self-signed:/opt/splunkforwarder/etc/system/ssl/self-signed   # Mount self-signed certs for syslog
       #- ./certs/splunk-cloud:/opt/splunkforwarder/etc/system/ssl/splunk-cloud  # Mount Splunk Cloud certs for HEC
       #- /path/to/your/logs:/logs  # Optional: Replace with the path to your log files
     ports:
-      - "${SYSLOG_PORT}:${SYSLOG_PORT}"  # Expose syslog port (TLS)
+      - "8089:8089"  # Expose HEC port
+      - "8088:8088"  # Expose HEC port
+      - "16512:16512"  # Expose HEC port
+      # - "${SYSLOG_PORT}:${SYSLOG_PORT}"  # Expose syslog port (TLS)
+
     restart: always
+ 
