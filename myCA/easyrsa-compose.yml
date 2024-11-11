@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  easyrsa:
+    build:
+      context: .
+      dockerfile: easyrsa.Dockerfile
+      args:
+        - VERSION=3.2.1
+    volumes:
+      - ./pki:/usr/local/easyrsa/pki
+      - ./myCA:/usr/local/easyrsa/myCA
+    working_dir: /usr/local/easyrsa
+    command: "build-ca --nopass"
+    stdin_open: true
+    tty: true

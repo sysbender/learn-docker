@@ -18,6 +18,10 @@ services:
       - SPLUNK_PASSWORD=changemoi
     volumes:
       - ./config/inputs.conf:/opt/splunkforwarder/etc/system/local/inputs.conf  # You may want to persist this to a volume if needed
+      - /home/vagrant/certs/server-combined.pem/:/opt/splunkforwarder/etc/certs/server-combined.pem
+      - /home/vagrant/certs/ca-cert.pem:/opt/splunkforwarder/etc/certs/ca-cert.pem
     ports:
       - "8089:8089"  # Expose any necessary ports
       - "26512:26512"
+      - "26513:26513"
+      - "26514:26514"
