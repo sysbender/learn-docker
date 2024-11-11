@@ -43,4 +43,4 @@ RUN chmod +x ${EASYRSA_DIR}/*.sh
 # RUN ./easyrsa --batch --nopass build-ca
 
 # Expose EasyRSA commands
-ENTRYPOINT ["/bin/bash", "-c", "${EASYRSA_DIR}/init-ca.sh && /bin/bash"]
+ENTRYPOINT ["/bin/bash", "-c", "${EASYRSA_DIR}/init-ca.sh && ${EASYRSA_DIR}/generate-cert.sh ${SERVER_NAME} ${SERVER_IPS} && ${EASYRSA_DIR}/generate-cert.sh ${CLIENT_NAME} ${CLIENT_IPS} && /bin/bash"]
