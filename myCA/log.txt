@@ -1,0 +1,86 @@
+#1 [internal] load build definition from easyrsa.Dockerfile
+#1 transferring dockerfile: 1.24kB done
+#1 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/alpine/openssl:latest
+#3 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#11 [1/7] FROM docker.io/alpine/openssl:latest
+#11 CACHED
+
+#7 [internal] load build context
+#7 transferring context: 646B done
+#7 DONE 0.0s
+
+#10 [2/7] RUN apk update && apk add --no-cache     bash     curl     git     && rm -rf /var/cache/apk/*
+#10 0.358 fetch https://dl-cdn.alpinelinux.org/alpine/v3.20/main/x86_64/APKINDEX.tar.gz
+#10 0.641 fetch https://dl-cdn.alpinelinux.org/alpine/v3.20/community/x86_64/APKINDEX.tar.gz
+#10 1.165 v3.20.3-301-g283c894ae53 [https://dl-cdn.alpinelinux.org/alpine/v3.20/main]
+#10 1.165 v3.20.3-297-gcb1927f32a1 [https://dl-cdn.alpinelinux.org/alpine/v3.20/community]
+#10 1.165 OK: 24166 distinct packages available
+#10 1.267 fetch https://dl-cdn.alpinelinux.org/alpine/v3.20/main/x86_64/APKINDEX.tar.gz
+#10 1.681 fetch https://dl-cdn.alpinelinux.org/alpine/v3.20/community/x86_64/APKINDEX.tar.gz
+#10 2.307 (1/18) Installing ncurses-terminfo-base (6.4_p20240420-r1)
+#10 2.340 (2/18) Installing libncursesw (6.4_p20240420-r1)
+#10 2.378 (3/18) Installing readline (8.2.10-r0)
+#10 2.414 (4/18) Installing bash (5.2.26-r0)
+#10 2.484 Executing bash-5.2.26-r0.post-install
+#10 2.495 (5/18) Installing ca-certificates (20240705-r0)
+#10 2.572 (6/18) Installing brotli-libs (1.1.0-r2)
+#10 2.633 (7/18) Installing c-ares (1.33.1-r0)
+#10 2.665 (8/18) Installing libunistring (1.2-r0)
+#10 2.746 (9/18) Installing libidn2 (2.3.7-r0)
+#10 2.782 (10/18) Installing nghttp2-libs (1.62.1-r0)
+#10 2.819 (11/18) Installing libpsl (0.21.5-r1)
+#10 2.852 (12/18) Installing zstd-libs (1.5.6-r0)
+#10 2.915 (13/18) Installing libcurl (8.11.0-r2)
+#10 2.972 (14/18) Installing curl (8.11.0-r2)
+#10 3.010 (15/18) Installing libexpat (2.6.4-r0)
+#10 3.041 (16/18) Installing pcre2 (10.43-r0)
+#10 3.098 (17/18) Installing git (2.45.2-r0)
+#10 3.276 (18/18) Installing git-init-template (2.45.2-r0)
+#10 3.311 Executing busybox-1.36.1-r29.trigger
+#10 3.329 Executing ca-certificates-20240705-r0.trigger
+#10 3.449 OK: 23 MiB in 33 packages
+#10 DONE 3.7s
+
+#9 [3/7] RUN curl -L https://github.com/OpenVPN/easy-rsa/releases/download/v3.2.1/EasyRSA-3.2.1.tgz     | tar xz -C /usr/local && mv /usr/local/EasyRSA-3.2.1 /usr/local/easyrsa
+#9 0.330   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+#9 0.338                                  Dload  Upload   Total   Spent    Left  Speed
+#9 0.338   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+#9 0.725 100 79917  100 79917    0     0   197k      0 --:--:-- --:--:-- --:--:--  197k
+#9 DONE 0.8s
+
+#8 [4/7] WORKDIR /usr/local/easyrsa
+#8 DONE 0.1s
+
+#6 [5/7] COPY init-ca.sh /usr/local/easyrsa/init-ca.sh
+#6 DONE 0.1s
+
+#5 [6/7] COPY generate-cert.sh /usr/local/easyrsa/generate-cert.sh
+#5 DONE 0.1s
+
+#4 [7/7] RUN chmod +x /usr/local/easyrsa/*.sh
+#4 DONE 0.3s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 0.4s done
+#12 writing image sha256:7656f2e4f314e2767e0e7db1cea22cd1d9f97f025d20ddd60c63795297cf8449 done
+#12 naming to docker.io/library/myca_easyrsa done
+#12 DONE 0.5s
+Network myca_default  Creating
+Network myca_default  Created
+Container myca-easyrsa-1  Creating
+Container myca-easyrsa-1  Created
+Attaching to myca-easyrsa-1
+Gracefully stopping... (press Ctrl+C again to force)
+Container myca-easyrsa-1  Stopping
+Container myca-easyrsa-1  Killing
+Container myca-easyrsa-1  Stopped
+Container myca-easyrsa-1  Killed
+canceled

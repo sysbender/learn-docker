@@ -7,10 +7,15 @@ services:
       dockerfile: easyrsa.Dockerfile
       args:
         - VERSION=3.2.1
+    environment:
+      SERVER_NAME: server
+      SERVER_IPS: 192.168.0.122,127.0.0.1
+      CLIENT_NAME: client
+      CLIENT_IPS: 192.168.0.122,127.0.0.1
     volumes:
-      - ./pki:/usr/local/easyrsa/pki
-      - ./myCA:/usr/local/easyrsa/myCA
+      - ./data:/data
+      #- ./myCA:/usr/local/easyrsa/myCA
     working_dir: /usr/local/easyrsa
-    command: "build-ca --nopass"
+    command: "./init-ca.sh"
     stdin_open: true
     tty: true
