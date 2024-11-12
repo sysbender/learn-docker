@@ -67,4 +67,9 @@ echo "<142>$HOSTNAME Hello World, $RANDOM" | gnutls-cli 192.168.0.122 --port=651
 
 echo "<142>$HOSTNAME Hello World, $RANDOM" | gnutls-cli 192.168.0.122 --port=26514 --x509cafile=/home/vagrant/certs/ca-cert.pem --x509certfile=/home/vagrant/certs/client-cert.pem --x509keyfile=/home/vagrant/certs/client-key.pem
 
+
+
+echo "<142>$HOSTNAME Hello World, $RANDOM" | gnutls-cli 192.168.0.122 --port=26514 --x509cafile=../data/pki/ca.crt --x509certfile=../data/pki/issued/client.crt --x509keyfile=../data/pki/private/client.key
  ```
+sudo cp my-ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates

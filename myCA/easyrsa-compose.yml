@@ -13,7 +13,7 @@ services:
       CLIENT_NAME: client
       CLIENT_IPS: 192.168.0.122,127.0.0.1
     volumes:
-      - ./data:/data
+      - ../data:/data
       #- ./myCA:/usr/local/easyrsa/myCA
     working_dir: /usr/local/easyrsa
     command: "./init-ca.sh"
