@@ -18,10 +18,15 @@ services:
       - SPLUNK_PASSWORD=changemoi
     volumes:
       - ./config/inputs.conf:/opt/splunkforwarder/etc/system/local/inputs.conf  # You may want to persist this to a volume if needed
-      - ../data/pki/private/server-combined.pem/:/opt/splunkforwarder/etc/certs/server-combined.pem
+      #- ./config/outputs.conf:/opt/splunkforwarder/etc/system/local/outputs.conf  
+      #- ./config/server.conf:/opt/splunkforwarder/etc/system/local/server.conf  
+      - ../data/pki/private/server-full.pem/:/opt/splunkforwarder/etc/certs/server-full.pem
       - ../data/pki/ca.crt:/opt/splunkforwarder/etc/certs/ca-cert.pem
+      - ../data/pki/ca.crt:/usr/local/share/ca-certificates/myca.crt
     ports:
       - "8089:8089"  # Expose any necessary ports
       - "26512:26512"
       - "26513:26513"
       - "26514:26514"
+    # ENTRYPOINT [ "/sbin/entrypoint.sh" ]
+    entrypoint: /bin/sh -c "update-ca-certificates && /sbin/entrypoint.sh start-service"
